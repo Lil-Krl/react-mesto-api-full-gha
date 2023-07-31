@@ -9,7 +9,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 158.160.111.71
+IP 158.160.111.71
 
 Frontend https://mesto-lilkrl.nomoreparties.co
 
