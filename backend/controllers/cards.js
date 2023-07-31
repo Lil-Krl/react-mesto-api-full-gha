@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Card = require('../models/card');
 const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
@@ -10,8 +11,8 @@ const createCard = async (req, res, next) => {
 
     res.status(201).send(card);
   } catch (err) {
-    if (err.name === 'ValidationError') {
-      next(new BadRequest('Переданы некорректные данные при создании карточки.'));
+    if (err instanceof mongoose.Error.ValidationError) {
+      next(new BadRequest('Переданы некорректные данные при создании карточки'));
     } else {
       next(err);
     }
@@ -40,11 +41,11 @@ const deleteCard = async (req, res, next) => {
       throw new CurrentErr('Вы не можете удалить чужую карточку');
     }
 
-    await Card.findByIdAndDelete(req.params.id);
+    await card.deleteOne();
 
     res.send(card);
   } catch (err) {
-    if (err.name === 'CastError') {
+    if (err instanceof mongoose.Error.CastError) {
       next(new BadRequest('Переданы некорректные данные'));
     } else {
       next(err);
@@ -76,7 +77,7 @@ const handleCardLike = async (req, res, next) => {
 
     res.send(card);
   } catch (err) {
-    if (err.name === 'CastError') {
+    if (err instanceof mongoose.Error.CastError) {
       next(new BadRequest('Переданы некорректные данные для постановки/снятии лайка'));
     } else {
       next(err);
